@@ -3,10 +3,10 @@ import * as db from './database.js';
 
 const router = express.Router();
 
-router.get('/getInformation/:name_with_spaces', async (req, resp) => {
+router.get('/getInformation/:name', async (req, resp) => {
   try {
-    if (req.params.name_with_spaces) {
-        const name = req.params.name_with_spaces.toString().trim();
+    if (req.params.name) {
+        const name = req.params.name.toString().trim();
         console.log(name);
         const result = await db.selectByName(name);
 
