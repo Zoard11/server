@@ -5,12 +5,19 @@ import { insertUserGroup } from './insertDb.js';
 export const createTableStudents = async () => {
   try {
     await dbConnection.executeQuery(`CREATE TABLE IF NOT EXISTS Ingredients (
-      "COSING Ref No" INT
-      ,"INCI name",
-      "INN name","Ph. Eur. Name","CAS No","EC No","Chem/IUPAC Name / Description",
-      "Restriction","Function","Update Date" 
-        PRIMARY KEY (StudentID)
-            );`);
+      \`COSING Ref No\` VARCHAR(10),
+      \`INCI name\` TEXT,
+      \`INN name\` VARCHAR(400),
+      \`Ph. Eur. Name\` VARCHAR(400),
+      \`CAS No\` VARCHAR(400),
+      \`EC No\` VARCHAR(400),
+      \`Chem/IUPAC Name / Description\` TEXT,
+      \`Restriction\` VARCHAR(400),
+      \`Function\` VARCHAR(400),
+      \`Update Date\` Date,
+        Id INT NOT NULL AUTO_INCREMENT,
+        PRIMARY KEY (\`Id\`) 
+    );`);
     console.log('Table created successfully');
   } catch (err) {
     console.error(`Create table error: ${err}`);
@@ -48,6 +55,7 @@ export const createTableUsers = async () => {
     process.exit(1);
   }
 };
+
 export const createAllTable = async () => {
   try {
     await createTableUserGroups();

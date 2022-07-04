@@ -1,14 +1,15 @@
-import mysql from 'mysql2';
+import mysql from 'mysql';
 import autoBind from 'auto-bind';
+import * as fs from 'fs';
 
 export class DbConnection {
   constructor() {
     this.pool = mysql.createPool({
       database: 'InciDatabase',
-      host: 'mysqldb',
+      host: 'localhost',
       port: 3306,
-      user: 'root',
-      password: 'root',
+      user: 'InciUser',
+      password: 'jelszo',
     });
     autoBind(this);
   }
@@ -23,6 +24,7 @@ export class DbConnection {
       });
     });
   }
+
 }
 
 export default new DbConnection();

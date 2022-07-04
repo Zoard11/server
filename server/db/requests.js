@@ -42,3 +42,16 @@ export const userRoleModify= (groupName, username) => {
   const query = 'UPDATE Users SET UserGroupID=(SELECT UserGroupID FROM UserGroups WHERE UserGroupname=?) WHERE UserName =?;';
   return dbConnection.executeQuery(query, [groupName, username]);
 };
+
+export const selectTopTen= () =>  {
+      const query = 'select * from ingredients limit 10 ';      
+      return dbConnection.executeQuery(query);
+    
+};
+
+export const selectByName = (name)  => {
+  const nameWithSpace = ` ${name}`;
+  const query = 'Select * FROM ingredients Where `INCI name` LIKE  ? OR `INCI name` LIKE ? ';   
+  return dbConnection.executeQuery(query,[name,nameWithSpace]).then((result) => result[0]);
+
+};

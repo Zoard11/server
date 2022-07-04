@@ -5,3 +5,9 @@ export const deleteUser = (username) => {
   return dbConnection.executeQuery(query, username);
 };
 
+export const deleteIngredients = () => {
+  const query = 'Delete FROM ingredients;';
+  return dbConnection.executeQuery(query);
+};
+
+
