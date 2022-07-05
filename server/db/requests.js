@@ -55,3 +55,28 @@ export const selectByName = (name)  => {
   return dbConnection.executeQuery(query,[name,nameWithSpace]).then((result) => result[0]);
 
 };
+
+export const selectBySizeAndByFirstIndex= (resultsPerPage,indexOfFirstResult) =>  {
+  const query = 'select * from ingredients limit ?,? ';      
+  return dbConnection.executeQuery(query, [indexOfFirstResult, resultsPerPage]);
+
+};
+
+export const IngredientsNumber = () => {
+  const query = 'SELECT COUNT(*) AS DB FROM ingredients';
+  return dbConnection.executeQuery(query).then((result) => result[0].DB);
+};
+
+
+export const selectBySizeAndByFirstIndexFilter= (resultsPerPage,indexOfFirstResult,name) =>  {
+  const query = 'select * from ingredients Where `INCI name` LIKE  ? limit ?,? ';      
+  return dbConnection.executeQuery(query, [name,indexOfFirstResult, resultsPerPage]);
+
+};
+
+export const IngredientsNumberFilter = (name) => {
+  const query = 'SELECT COUNT(*) AS DB FROM ingredients Where `INCI name` LIKE  ?';
+  return dbConnection.executeQuery(query,name).then((result) => result[0].DB);
+};
+
+

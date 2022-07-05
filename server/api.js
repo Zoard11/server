@@ -16,7 +16,6 @@ router.get('/getInformation/:name', async (req, resp) => {
   try {
     if (req.params.name) {
         const name = req.params.name.toString().trim();
-        console.log(name); 
         const result = await requestDb.selectByName(name);
 
         if(result){
@@ -43,14 +42,11 @@ router.get('/getInformation/:name', async (req, resp) => {
 });
 
 router.post('/uploadFile',  upload.single('file'),async (req, resp) => {
-    console.log("uploadFile");
    
     try {
       if (req.file.filename) {
-        console.log(req.file.filename);
           const result0 = await deleteDb.deleteIngredients();
           const result = await uploadDB.changeIngredients(req.file.filename);
-          console.log('/uploadFile');
   
 
           resp.status(204).send()
@@ -73,21 +69,127 @@ router.post('/uploadFile',  upload.single('file'),async (req, resp) => {
     }
 });
 
-router.get('/topTen', async (req, resp) => {
+
+router.get('/', async (req, resp) => {
   try {
 
-    console.log("Top ten");
-    const result = await requestDb.selectTopTen();
 
-    if(result){
-      resp.json(result);
-    } 
+    const dataPerPage = parseInt(req.query.dataPerPage);
+    const indexOfFirstResult = parseInt(req.query.indexOfFirstResult);
+    const search = `${req.query.search}%`;
+
+
+    if(search){
+          // filter
+
+      if(indexOfFirstResult === -1){
+
+        const db= await requestDb.IngredientsNumberFilter(search)
+
+        let indexFirstResult = parseInt(db/dataPerPage)*dataPerPage;
+        if(indexFirstResult===db){
+          indexFirstResult=indexFirstResult-1;
+        }
+
+
+
+        await requestDb.selectBySizeAndByFirstIndexFilter(dataPerPage,indexFirstResult,search)
+        .then(result => {
+          if(result){
+            result.currentPage=indexFirstResult;
+            const response = {
+              result: result,
+              currentPage: parseInt(indexFirstResult/dataPerPage)+1,
+          }
+            resp.json(response);
+          } 
+          else{
+            resp.json('There is no ingredients in the database.');
+          }
+        })
+          .catch(function (error) {
+            console.log(error);
+            resp.status(500).json('Database error.');
+          }
+          );
+    }
     else{
-      resp.json('There is no ingredients in the database.');
+
+      const r=await requestDb.selectBySizeAndByFirstIndexFilter(dataPerPage,indexOfFirstResult,search)
+        .then(result => {
+          if(result){
+            
+            resp.json(result);
+          } 
+          else{
+            resp.json('There is no ingredients in the database.');
+          }
+        })
+          .catch(function (error) {
+            console.log(error);
+            resp.status(500).json('Database error.');
+          }
+          );
+
+    } 
+    } else{
+      if(indexOfFirstResult === -1){
+
+        const db= await requestDb.IngredientsNumber()
+
+
+        let indexFirstResult = parseInt(db/dataPerPage)*dataPerPage;
+        if(indexFirstResult===db){
+          indexFirstResult=indexFirstResult-1;
+        }
+
+
+
+        await requestDb.selectBySizeAndByFirstIndex(dataPerPage,indexFirstResult)
+        .then(result => {
+          if(result){
+            result.currentPage=indexFirstResult;
+            const response = {
+              result: result,
+              currentPage: parseInt(indexFirstResult/dataPerPage)+1,
+          }
+            resp.json(response);
+          } 
+          else{
+            resp.json('There is no ingredients in the database.');
+          }
+        })
+          .catch(function (error) {
+            console.log(error);
+            resp.status(500).json('Database error.');
+          }
+          );
+    }
+    else{
+      await requestDb.selectBySizeAndByFirstIndex(dataPerPage,indexOfFirstResult)
+        .then(result => {
+          if(result){
+            resp.json(result);
+          } 
+          else{
+            resp.json('There is no ingredients in the database.');
+          }
+        })
+          .catch(function (error) {
+            console.log(error);
+            resp.status(500).json('Database error.');
+          }
+          );
+    }        
+      
     }
     
 
+    
+    
+
   } catch (err) {
+    console.log(err);
     const errorMessage = err.message;
     const obj = {};
     obj.errorMessage = errorMessage;
@@ -95,6 +197,5 @@ router.get('/topTen', async (req, resp) => {
     resp.status(500).json(jsonString);
   }
 });
-
 
 export default router;
