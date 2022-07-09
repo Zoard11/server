@@ -10,4 +10,7 @@ export const deleteIngredients = () => {
   return dbConnection.executeQuery(query);
 };
 
-
+export const deleteIngredientById = (id) => {
+  const query = 'Delete FROM ingredients WHERE Id = ?';
+  return dbConnection.executeQuery(query,id);
+};
