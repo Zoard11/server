@@ -8,6 +8,7 @@ import fs from 'fs';
 import multer from 'multer';
 import * as requestDb from './db/requests.js';
 import * as updateDb from './db/updateDb.js';
+import * as insertDb from './db/insertDb.js';
 
 const router = express.Router();
 
@@ -205,7 +206,7 @@ router.put('/update/:id', async (req, resp) => {
     if (req.params.id) {
 
 
-        await updateDb.updateIngredient(req.body.data,req.params.id,)
+        await updateDb.updateIngredient(req.body.data,req.params.id)
         .then(result => {
           resp.status(204).send();
         })
@@ -235,7 +236,6 @@ router.put('/update/:id', async (req, resp) => {
 
 router.delete('/delete/:id', async (req, resp) => {
   try {
-    console.log(req.params);
     if (req.params.id) {
 
         await deleteDb.deleteIngredientById(req.params.id,)
@@ -256,6 +256,33 @@ router.delete('/delete/:id', async (req, resp) => {
       const jsonString = JSON.stringify(obj);
       resp.status(400).json(jsonString);
     }
+  } catch (err) {
+    console.log(err);
+    const errorMessage = err.message;
+    const obj = {};
+    obj.errorMessage = errorMessage;
+    const jsonString = JSON.stringify(obj);
+    resp.status(500).json(jsonString);
+  }
+});
+
+router.post('/ingredient', async (req, resp) => {
+  try {
+
+    console.log(req.body.data);
+    await insertDb.insertIngredient(req.body.data)
+      .then(result => {
+        console.log(result);
+        resp.status(204).send();
+      })
+        .catch(function (error) {
+          console.log(error);
+          resp.status(500).json('Database error.');
+        }
+        );
+
+        
+
   } catch (err) {
     console.log(err);
     const errorMessage = err.message;
