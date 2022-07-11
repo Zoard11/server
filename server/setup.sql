@@ -21,5 +21,5 @@ SET `Update Date` = STR_TO_DATE(@date_variable, '%d/%m/%Y');
 SET SQL_SAFE_UPDATES = 0;
 
 
-CREATE USER 'InciUser'@'localhost' IDENTIFIED WITH mysql_native_password  BY 'jelszo';
+CREATE USER 'InciUser'@'localhost' IDENTIFIED WITH mysql_native_password  BY 'password';
 GRANT ALL PRIVILEGES ON *.* TO 'InciUser'@'localhost' ;

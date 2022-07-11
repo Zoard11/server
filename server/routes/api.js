@@ -215,7 +215,7 @@ router.put('/update/:id', async (req, resp) => {
         if (req.params.id) {
 
 
-            await updateDb.updateIngredient(req.body.data,req.params.id)
+            await updateDb.updateIngredient(req.body,req.params.id)
             .then(result => {
               resp.status(204).send();
             })
@@ -294,7 +294,7 @@ router.post('/ingredient', async (req, resp) => {
   try {
     if (resp.locals.permission === 'admin') {
 
-      await insertDb.insertIngredient(req.body.data)
+      await insertDb.insertIngredient(req.body)
         .then(result => {
           resp.status(204).send();
         })
