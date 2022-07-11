@@ -5,11 +5,11 @@ import * as fs from 'fs';
 export class DbConnection {
   constructor() {
     this.pool = mysql.createPool({
-      database: 'InciDatabase',
+      database: 'db',
       host: 'localhost',
       port: 3306,
-      user: 'InciUser',
-      password: 'jelszo',
+      user: 'user',
+      password: 'user',
     });
     autoBind(this);
   }
