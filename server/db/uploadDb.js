@@ -1,6 +1,6 @@
 
 import * as fs from 'fs';
-import dbConnection from './db/connection.js';
+import dbConnection from './connection.js';
 
   export function changeIngredients  (filename)  {
 
