@@ -47,20 +47,28 @@ router.get('/getInformation/:name', async (req, resp) => {
 router.post('/uploadFile',  upload.single('file'),async (req, resp) => {
    
     try {
-      if (req.file.filename) {
-          const result0 = await deleteDb.deleteIngredients();
-          const result = await uploadDb.changeIngredients(req.file.filename);
-  
+      if (resp.locals.permission === 'admin') {
+          if (req.file.filename) {
+              const result0 = await deleteDb.deleteIngredients();
+              const result = await uploadDb.changeIngredients(req.file.filename);
+      
 
-          resp.status(204).send()
+              resp.status(204).send()
 
-          
+              
+          } else {
+            const errorMessage = 'File is missing!';
+            const obj = {};
+            obj.errorMessage = errorMessage;
+            const jsonString = JSON.stringify(obj);
+            resp.status(400).json(jsonString);
+          }
       } else {
-        const errorMessage = 'File is missing!';
+        const errorMessage = 'Only admins can update database!';
         const obj = {};
         obj.errorMessage = errorMessage;
         const jsonString = JSON.stringify(obj);
-        resp.status(400).json(jsonString);
+        resp.status(403).json(jsonString);
       }
     } catch (err) {
       console.log(err);
@@ -203,27 +211,35 @@ router.get('/', async (req, resp) => {
 
 router.put('/update/:id', async (req, resp) => {
   try {
-    if (req.params.id) {
+    if (resp.locals.permission === 'admin') {
+        if (req.params.id) {
 
 
-        await updateDb.updateIngredient(req.body.data,req.params.id)
-        .then(result => {
-          resp.status(204).send();
-        })
-          .catch(function (error) {
-            console.log(error);
-            resp.status(500).json('Database error.');
-          }
-          );
+            await updateDb.updateIngredient(req.body.data,req.params.id)
+            .then(result => {
+              resp.status(204).send();
+            })
+              .catch(function (error) {
+                console.log(error);
+                resp.status(500).json('Database error.');
+              }
+              );
 
-        
-    } else {
-      const errorMessage = 'Id is missing!';
-      const obj = {};
-      obj.errorMessage = errorMessage;
-      const jsonString = JSON.stringify(obj);
-      resp.status(400).json(jsonString);
-    }
+            
+        } else {
+          const errorMessage = 'Id is missing!';
+          const obj = {};
+          obj.errorMessage = errorMessage;
+          const jsonString = JSON.stringify(obj);
+          resp.status(400).json(jsonString);
+        }
+      } else {
+        const errorMessage = 'Only admins can update database!';
+        const obj = {};
+        obj.errorMessage = errorMessage;
+        const jsonString = JSON.stringify(obj);
+        resp.status(403).json(jsonString);
+      }
   } catch (err) {
     console.log(err);
     const errorMessage = err.message;
@@ -236,25 +252,33 @@ router.put('/update/:id', async (req, resp) => {
 
 router.delete('/delete/:id', async (req, resp) => {
   try {
-    if (req.params.id) {
+    if (resp.locals.permission === 'admin') {
+        if (req.params.id) {
 
-        await deleteDb.deleteIngredientById(req.params.id,)
-        .then(result => {
-          resp.status(204).send();
-        })
-          .catch(function (error) {
-            console.log(error);
-            resp.status(500).json('Database error.');
-          }
-          );
+            await deleteDb.deleteIngredientById(req.params.id,)
+            .then(result => {
+              resp.status(204).send();
+            })
+              .catch(function (error) {
+                console.log(error);
+                resp.status(500).json('Database error.');
+              }
+              );
 
-        
+            
+        } else {
+          const errorMessage = 'Id is missing!';
+          const obj = {};
+          obj.errorMessage = errorMessage;
+          const jsonString = JSON.stringify(obj);
+          resp.status(400).json(jsonString);
+        }
     } else {
-      const errorMessage = 'Id is missing!';
+      const errorMessage = 'Only admins can update database!';
       const obj = {};
       obj.errorMessage = errorMessage;
       const jsonString = JSON.stringify(obj);
-      resp.status(400).json(jsonString);
+      resp.status(403).json(jsonString);
     }
   } catch (err) {
     console.log(err);
@@ -268,18 +292,133 @@ router.delete('/delete/:id', async (req, resp) => {
 
 router.post('/ingredient', async (req, resp) => {
   try {
-    await insertDb.insertIngredient(req.body.data)
-      .then(result => {
-        resp.status(204).send();
-      })
-        .catch(function (error) {
-          console.log(error);
-          resp.status(500).json('Database error.');
-        }
-        );
+    if (resp.locals.permission === 'admin') {
+
+      await insertDb.insertIngredient(req.body.data)
+        .then(result => {
+          resp.status(204).send();
+        })
+          .catch(function (error) {
+            console.log(error);
+            resp.status(500).json('Database error.');
+          }
+          );
+    } else {
+      const errorMessage = 'Only admins can update database!';
+      const obj = {};
+      obj.errorMessage = errorMessage;
+      const jsonString = JSON.stringify(obj);
+      resp.status(403).json(jsonString);
+    }
 
         
 
+  } catch (err) {
+    console.log(err);
+    const errorMessage = err.message;
+    const obj = {};
+    obj.errorMessage = errorMessage;
+    const jsonString = JSON.stringify(obj);
+    resp.status(500).json(jsonString);
+  }
+});
+
+router.get('/users', async (req, resp) => {
+  try {
+    if (resp.locals.permission === 'admin') {
+
+        const result = await requestDb.allUserWithRole();
+
+        resp.json(result);
+
+    } else {
+      const errorMessage = 'Only admins can see this!';
+      const obj = {};
+      obj.errorMessage = errorMessage;
+      const jsonString = JSON.stringify(obj);
+      resp.status(403).json(jsonString);
+    }
+  } catch (err) {
+    console.log(err);
+    const errorMessage = err.message;
+    const obj = {};
+    obj.errorMessage = errorMessage;
+    const jsonString = JSON.stringify(obj);
+    resp.status(500).json(jsonString);
+  }
+});
+
+
+router.delete('/users/:username', async (req, resp) => {
+  try {
+    if (resp.locals.permission === 'admin') {
+        if (req.params.username) {
+
+            await deleteDb.deleteUser(req.params.username)
+            .then(result => {
+              resp.status(204).send();
+            })
+              .catch(function (error) {
+                console.log(error);
+                resp.status(500).json('Database error.');
+              }
+              );
+
+            
+        } else {
+          const errorMessage = 'Id is missing!';
+          const obj = {};
+          obj.errorMessage = errorMessage;
+          const jsonString = JSON.stringify(obj);
+          resp.status(400).json(jsonString);
+        }
+    } else {
+      const errorMessage = 'Only admins can delete from database!';
+      const obj = {};
+      obj.errorMessage = errorMessage;
+      const jsonString = JSON.stringify(obj);
+      resp.status(403).json(jsonString);
+    }
+  } catch (err) {
+    console.log(err);
+    const errorMessage = err.message;
+    const obj = {};
+    obj.errorMessage = errorMessage;
+    const jsonString = JSON.stringify(obj);
+    resp.status(500).json(jsonString);
+  }
+});
+
+router.patch('/users/:username', async (req, resp) => {
+  try {
+    if (resp.locals.permission === 'admin') {
+        if (req.params.username && req.body.newRole && resp.locals.payload.username !== req.params.username) {
+
+            await requestDb.userRoleModify(req.body.newRole,req.params.username)
+            .then(result => {
+              resp.status(204).send();
+            })
+              .catch(function (error) {
+                console.log(error);
+                resp.status(500).json('Database error.');
+              }
+              );
+
+            
+        } else {
+          const errorMessage = 'Bad request!';
+          const obj = {};
+          obj.errorMessage = errorMessage;
+          const jsonString = JSON.stringify(obj);
+          resp.status(400).json(jsonString);
+        }
+    } else {
+      const errorMessage = 'Only admins can modify user roles!';
+      const obj = {};
+      obj.errorMessage = errorMessage;
+      const jsonString = JSON.stringify(obj);
+      resp.status(403).json(jsonString);
+    }
   } catch (err) {
     console.log(err);
     const errorMessage = err.message;

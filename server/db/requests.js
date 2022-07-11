@@ -33,9 +33,9 @@ export const userRole = (username) => {
     .then((result) => result[0].UserGroupname);
 };
 
-export const allUserWithRole = (username) => {
-  const query = 'SELECT * FROM Users f JOIN UserGroups fcs ON f.UserGroupID=fcs.UserGroupID';
-  return dbConnection.executeQuery(query, username);
+export const allUserWithRole = () => {
+  const query = 'SELECT Username,UserGroupName FROM Users f JOIN UserGroups fcs ON f.UserGroupID=fcs.UserGroupID';
+  return dbConnection.executeQuery(query);
 };
 
 export const userRoleModify= (groupName, username) => {
