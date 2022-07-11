@@ -2,13 +2,13 @@ import { createRequire } from 'module';
 const require = createRequire(import.meta.url);
 
 import express from 'express';
-import * as uploadDb from './db/uploadDb.js';
-import * as deleteDb from './db/deleteDb.js';
+import * as uploadDb from '../db/uploadDb.js';
+import * as deleteDb from '../db/deleteDb.js';
 import fs from 'fs';
 import multer from 'multer';
-import * as requestDb from './db/requests.js';
-import * as updateDb from './db/updateDb.js';
-import * as insertDb from './db/insertDb.js';
+import * as requestDb from '../db/requests.js';
+import * as updateDb from '../db/updateDb.js';
+import * as insertDb from '../db/insertDb.js';
 
 const router = express.Router();
 
@@ -268,11 +268,8 @@ router.delete('/delete/:id', async (req, resp) => {
 
 router.post('/ingredient', async (req, resp) => {
   try {
-
-    console.log(req.body.data);
     await insertDb.insertIngredient(req.body.data)
       .then(result => {
-        console.log(result);
         resp.status(204).send();
       })
         .catch(function (error) {
