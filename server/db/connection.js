@@ -1,15 +1,14 @@
 import mysql from 'mysql';
 import autoBind from 'auto-bind';
-import * as fs from 'fs';
 
 export class DbConnection {
   constructor() {
     this.pool = mysql.createPool({
       database: 'InciDatabase',
-      host: 'localhost',
+      host: 'mysqldb',
       port: 3306,
       user: 'InciUser',
-      password: 'jelszo',
+      password: 'password',
     });
     autoBind(this);
   }

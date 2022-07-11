@@ -44,38 +44,38 @@ export const userRoleModify= (groupName, username) => {
 };
 
 export const selectTopTen= () =>  {
-      const query = 'select * from ingredients limit 10 ';      
+      const query = 'select * from Ingredients limit 10 ';      
       return dbConnection.executeQuery(query);
     
 };
 
 export const selectByName = (name)  => {
   const nameWithSpace = ` ${name}`;
-  const query = 'Select * FROM ingredients Where `INCI name` LIKE  ? OR `INCI name` LIKE ? ';   
+  const query = 'Select * FROM Ingredients Where `INCI name` LIKE  ? OR `INCI name` LIKE ? ';   
   return dbConnection.executeQuery(query,[name,nameWithSpace]).then((result) => result[0]);
 
 };
 
 export const selectBySizeAndByFirstIndex= (resultsPerPage,indexOfFirstResult) =>  {
-  const query = 'select * from ingredients limit ?,? ';      
+  const query = 'select * from Ingredients limit ?,? ';      
   return dbConnection.executeQuery(query, [indexOfFirstResult, resultsPerPage]);
 
 };
 
 export const IngredientsNumber = () => {
-  const query = 'SELECT COUNT(*) AS DB FROM ingredients';
+  const query = 'SELECT COUNT(*) AS DB FROM Ingredients';
   return dbConnection.executeQuery(query).then((result) => result[0].DB);
 };
 
 
 export const selectBySizeAndByFirstIndexFilter= (resultsPerPage,indexOfFirstResult,name) =>  {
-  const query = 'select * from ingredients Where `INCI name` LIKE  ? limit ?,? ';      
+  const query = 'select * from Ingredients Where `INCI name` LIKE  ? limit ?,? ';      
   return dbConnection.executeQuery(query, [name,indexOfFirstResult, resultsPerPage]);
 
 };
 
 export const IngredientsNumberFilter = (name) => {
-  const query = 'SELECT COUNT(*) AS DB FROM ingredients Where `INCI name` LIKE  ?';
+  const query = 'SELECT COUNT(*) AS DB FROM Ingredients Where `INCI name` LIKE  ?';
   return dbConnection.executeQuery(query,name).then((result) => result[0].DB);
 };
 

@@ -16,7 +16,7 @@ export const insertUserUser = (username, hashedPassword) => {
 };
 
 export const insertIngredient= (data,id) =>  {
-  const query = 'INSERT INTO INGREDIENTS VALUES ( ?,?,?,?,?,?,?,?,?,?,0) ';      
+  const query = 'INSERT INTO Ingredients VALUES ( ?,?,?,?,?,?,?,?,?,?,0) ';      
   return dbConnection.executeQuery(query, [data.inputTextCosingRefNo,data.inputTextInciName,data.inputTextInnName,data.inputTextPhEurName,data.inputTextCasNo,data.inputTextEcNo,data.inputTextDescription,data.inputTextRestriction,data.inputTextFunction,new Date()]);
 
 };

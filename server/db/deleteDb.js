@@ -6,11 +6,11 @@ export const deleteUser = (username) => {
 };
 
 export const deleteIngredients = () => {
-  const query = 'Delete FROM ingredients;';
+  const query = 'Delete FROM Ingredients;';
   return dbConnection.executeQuery(query);
 };
 
 export const deleteIngredientById = (id) => {
-  const query = 'Delete FROM ingredients WHERE Id = ?';
+  const query = 'Delete FROM Ingredients WHERE Id = ?';
   return dbConnection.executeQuery(query,id);
 };
