@@ -429,4 +429,27 @@ router.patch('/users/:username', async (req, resp) => {
   }
 });
 
+router.get('/topTen', async (req, resp) => {
+  try {
+
+    console.log("Top ten");
+    const result = await requestDb.selectTopTen();
+
+    if(result){
+      resp.json(result);
+    } 
+    else{
+      resp.json('There is no ingredients in the database.');
+    }
+    
+
+  } catch (err) {
+    const errorMessage = err.message;
+    const obj = {};
+    obj.errorMessage = errorMessage;
+    const jsonString = JSON.stringify(obj);
+    resp.status(500).json(jsonString);
+  }
+});
+
 export default router;
