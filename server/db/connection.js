@@ -17,11 +17,11 @@ export class DbConnection {
       // password: 'password',
       // database: 'InciDatabase',
       //remote mysql database
-      host: 'sql11.freesqldatabase.com',
+      host: '34.81.193.217',
       port: 3306,
-      user: 'sql11505882',
-      password: 'DLm38clbD8',
-      database: 'sql11505882',
+      user: 'root',
+      password: 'incipassword',
+      database: 'InciDatabase',
     });
     autoBind(this);
   }
