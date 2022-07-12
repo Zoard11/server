@@ -10,7 +10,7 @@ const app = express();
 const port = process.env.PORT || 8080;
 
 app.all('/*', function(req, res, next) {
-    res.header("Access-Control-Allow-Origin",  "https://cosmetic-ingredients-1.herokuapp.com");
+    res.header("Access-Control-Allow-Origin",  "https://cosmetic-client.herokuapp.com");
     //local 
     // res.header("Access-Control-Allow-Origin",  "http://localhost:3000"); 
     res.header("Access-Control-Allow-Headers", "X-Requested-With,Content-Type, Accept, Authorization");
