@@ -4,13 +4,21 @@ import autoBind from 'auto-bind';
 export class DbConnection {
   constructor() {
     this.pool = mysql.createPool({
-      database: 'InciDatabase',
+      //local database:
+      // host: 'localhost',
+      // port: 3306,
+      // user: 'InciUser',
+      // password: 'password',
       // docker:
       // host: 'mysqldb',
-      host: 'localhost',
+      // port: 3306,
+      // user: 'InciUser',
+      // password: 'password',
+      host: 'sql11.freesqldatabase.com',
       port: 3306,
-      user: 'InciUser',
-      password: 'password',
+      user: 'sql11505882',
+      password: 'DLm38clbD8',
+      database: 'sql11505882',
     });
     autoBind(this);
   }
