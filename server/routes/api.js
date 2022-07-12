@@ -452,4 +452,10 @@ router.get('/topTen', async (req, resp) => {
   }
 });
 
+router.get('/proba', async (req, resp) => {
+
+  resp.json('SIKERULT.');
+  
+});
+
 export default router;
