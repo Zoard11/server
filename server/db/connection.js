@@ -4,16 +4,19 @@ import autoBind from 'auto-bind';
 export class DbConnection {
   constructor() {
     this.pool = mysql.createPool({
-      //local database:
+      // local database:
       // host: 'localhost',
       // port: 3306,
       // user: 'InciUser',
       // password: 'password',
+      // database: 'InciDatabase',
       // docker:
       // host: 'mysqldb',
       // port: 3306,
       // user: 'InciUser',
       // password: 'password',
+      // database: 'InciDatabase',
+      //remote mysql database
       host: 'sql11.freesqldatabase.com',
       port: 3306,
       user: 'sql11505882',
