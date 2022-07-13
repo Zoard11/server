@@ -1,6 +1,6 @@
-import dbConnection from './connection.js';
-import { UserGroupsNumber } from './requests.js';
-import { insertUserGroup } from './insertDb.js';
+import dbConnection from "./connection.js";
+import { UserGroupsNumber } from "./requests.js";
+import { insertUserGroup } from "./insertDb.js";
 
 export const createTableStudents = async () => {
   try {
@@ -18,7 +18,7 @@ export const createTableStudents = async () => {
         Id INT NOT NULL AUTO_INCREMENT,
         PRIMARY KEY (\`Id\`) 
     );`);
-    console.log('Table created successfully');
+    console.log("Table created successfully");
   } catch (err) {
     console.error(`Create table error: ${err}`);
     process.exit(1);
@@ -32,7 +32,7 @@ export const createTableUserGroups = async () => {
       UserGroupName VARCHAR(100),
       PRIMARY KEY (UserGroupID)
     );`);
-    console.log('Table created successfully');
+    console.log("Table created successfully");
   } catch (err) {
     console.error(`Create table error: ${err}`);
     process.exit(1);
@@ -49,7 +49,7 @@ export const createTableUsers = async () => {
       PRIMARY KEY (UserID),
       FOREIGN KEY (UserGroupID) REFERENCES UserGroups(UserGroupID)
       );`);
-    console.log('Table created successfully');
+    console.log("Table created successfully");
   } catch (err) {
     console.error(`Create table error: ${err}`);
     process.exit(1);
@@ -61,10 +61,11 @@ export const createAllTable = async () => {
     await createTableUserGroups();
     await createTableUsers();
     await createTableStudents();
+    // await enableRemoveAndUpload();
     const userGroupsNumber = await UserGroupsNumber();
     if (userGroupsNumber === 0) {
-      await insertUserGroup('admin');
-      await insertUserGroup('user');
+      await insertUserGroup("admin");
+      await insertUserGroup("user");
     }
   } catch (err) {
     console.error(`Create table error: ${err}`);
