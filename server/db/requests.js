@@ -93,3 +93,28 @@ export const IngredientsNumberFilter = name => {
     'SELECT COUNT(*) AS DB FROM Ingredients Where `INCI name` LIKE  ?';
   return dbConnection.executeQuery(query, name).then(result => result[0].DB);
 };
+
+export const selectBySizeByFirstIndexFilterAndByOrder = (
+  resultsPerPage,
+  indexOfFirstResult,
+  name,
+  order
+) => {
+  if(order ==='asc'){
+      const query =
+        'select * from Ingredients Where `INCI name` LIKE  ?  ORDER BY `INCI name` asc limit ?,?;';
+      return dbConnection.executeQuery(query, [
+        name,
+        indexOfFirstResult,
+        resultsPerPage
+      ]);
+  } else{
+    const query =
+        'select * from Ingredients Where `INCI name` LIKE  ?  ORDER BY `INCI name` desc limit ?,?;';
+      return dbConnection.executeQuery(query, [
+        name,
+        indexOfFirstResult,
+        resultsPerPage
+      ]);
+  }
+};

@@ -75,10 +75,62 @@ router.get('/', async (req, resp) => {
     const dataPerPage = parseInt(req.query.dataPerPage);
     const indexOfFirstResult = parseInt(req.query.indexOfFirstResult);
     const search = `${req.query.search}%`;
+    const order = req.query.order;
+    // console.log('order');
+    // console.log(order);
+    // console.log(order === '');
 
-    if (search) {
-      // filter
+      if(order === ''){
+          if (indexOfFirstResult === -1) {
+            const db = await requestDb.IngredientsNumberFilter(search);
 
+            let indexFirstResult = parseInt(db / dataPerPage) * dataPerPage;
+            if (indexFirstResult === db) {
+              indexFirstResult = indexFirstResult - 1;
+            }
+
+            await requestDb
+              .selectBySizeAndByFirstIndexFilter(
+                dataPerPage,
+                indexFirstResult,
+                search,
+              )
+              .then(result => {
+                if (result) {
+                  result.currentPage = indexFirstResult;
+                  const response = {
+                    result: result,
+                    currentPage: parseInt(indexFirstResult / dataPerPage) + 1,
+                  };
+                  resp.json(response);
+                } else {
+                  resp.json('There is no ingredients in the database.');
+                }
+              })
+              .catch(function (error) {
+                console.log(error);
+                resp.status(500).json('Database error.');
+              });
+          } else {
+            await requestDb
+              .selectBySizeAndByFirstIndexFilter(
+                dataPerPage,
+                indexOfFirstResult,
+                search,
+              )
+              .then(result => {
+                if (result) {
+                  resp.json(result);
+                } else {
+                  resp.json('There is no ingredients in the database.');
+                }
+              })
+              .catch(function (error) {
+                console.log(error);
+                resp.status(500).json('Database error.');
+              });
+          }
+    } else{
       if (indexOfFirstResult === -1) {
         const db = await requestDb.IngredientsNumberFilter(search);
 
@@ -88,10 +140,11 @@ router.get('/', async (req, resp) => {
         }
 
         await requestDb
-          .selectBySizeAndByFirstIndexFilter(
+          .selectBySizeByFirstIndexFilterAndByOrder(
             dataPerPage,
             indexFirstResult,
             search,
+            order
           )
           .then(result => {
             if (result) {
@@ -111,53 +164,12 @@ router.get('/', async (req, resp) => {
           });
       } else {
         await requestDb
-          .selectBySizeAndByFirstIndexFilter(
+          .selectBySizeByFirstIndexFilterAndByOrder(
             dataPerPage,
             indexOfFirstResult,
             search,
+            order
           )
-          .then(result => {
-            if (result) {
-              resp.json(result);
-            } else {
-              resp.json('There is no ingredients in the database.');
-            }
-          })
-          .catch(function (error) {
-            console.log(error);
-            resp.status(500).json('Database error.');
-          });
-      }
-    } else {
-      if (indexOfFirstResult === -1) {
-        const db = await requestDb.IngredientsNumber();
-
-        let indexFirstResult = parseInt(db / dataPerPage) * dataPerPage;
-        if (indexFirstResult === db) {
-          indexFirstResult = indexFirstResult - 1;
-        }
-
-        await requestDb
-          .selectBySizeAndByFirstIndex(dataPerPage, indexFirstResult)
-          .then(result => {
-            if (result) {
-              result.currentPage = indexFirstResult;
-              const response = {
-                result: result,
-                currentPage: parseInt(indexFirstResult / dataPerPage) + 1,
-              };
-              resp.json(response);
-            } else {
-              resp.json('There is no ingredients in the database.');
-            }
-          })
-          .catch(function (error) {
-            console.log(error);
-            resp.status(500).json('Database error.');
-          });
-      } else {
-        await requestDb
-          .selectBySizeAndByFirstIndex(dataPerPage, indexOfFirstResult)
           .then(result => {
             if (result) {
               resp.json(result);
