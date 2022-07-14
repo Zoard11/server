@@ -1,16 +1,16 @@
-import express from "express";
-import * as uploadDb from "../db/uploadDb.js";
-import * as deleteDb from "../db/deleteDb.js";
-import multer from "multer";
-import * as requestDb from "../db/requests.js";
-import * as updateDb from "../db/updateDb.js";
-import * as insertDb from "../db/insertDb.js";
+import express from 'express';
+import * as uploadDb from '../db/uploadDb.js';
+import * as deleteDb from '../db/deleteDb.js';
+import multer from 'multer';
+import * as requestDb from '../db/requests.js';
+import * as updateDb from '../db/updateDb.js';
+import * as insertDb from '../db/insertDb.js';
 
 const router = express.Router();
 
-const upload = multer({ dest: "tmp/csv/" });
+const upload = multer({dest: 'tmp/csv/'});
 
-router.get("/getInformation/:name", async (req, resp) => {
+router.get('/getInformation/:name', async (req, resp) => {
   try {
     if (req.params.name) {
       const name = req.params.name.toString().trim();
@@ -19,10 +19,10 @@ router.get("/getInformation/:name", async (req, resp) => {
       if (result) {
         resp.json(result);
       } else {
-        resp.json("There is no ingredient with this name.");
+        resp.json('There is no ingredient with this name.');
       }
     } else {
-      const errorMessage = "Name is missing!";
+      const errorMessage = 'Name is missing!';
       const obj = {};
       obj.errorMessage = errorMessage;
       const jsonString = JSON.stringify(obj);
@@ -38,23 +38,23 @@ router.get("/getInformation/:name", async (req, resp) => {
   }
 });
 
-router.post("/uploadFile", upload.single("file"), async (req, resp) => {
+router.post('/uploadFile', upload.single('file'), async (req, resp) => {
   try {
-    if (resp.locals.permission === "admin") {
+    if (resp.locals.permission === 'admin') {
       if (req.file.filename) {
         await deleteDb.deleteIngredients();
         await uploadDb.changeIngredients(req.file.filename);
 
         resp.status(204).send();
       } else {
-        const errorMessage = "File is missing!";
+        const errorMessage = 'File is missing!';
         const obj = {};
         obj.errorMessage = errorMessage;
         const jsonString = JSON.stringify(obj);
         resp.status(400).json(jsonString);
       }
     } else {
-      const errorMessage = "Only admins can update database!";
+      const errorMessage = 'Only admins can update database!';
       const obj = {};
       obj.errorMessage = errorMessage;
       const jsonString = JSON.stringify(obj);
@@ -70,7 +70,7 @@ router.post("/uploadFile", upload.single("file"), async (req, resp) => {
   }
 });
 
-router.get("/", async (req, resp) => {
+router.get('/', async (req, resp) => {
   try {
     const dataPerPage = parseInt(req.query.dataPerPage);
     const indexOfFirstResult = parseInt(req.query.indexOfFirstResult);
@@ -91,9 +91,9 @@ router.get("/", async (req, resp) => {
           .selectBySizeAndByFirstIndexFilter(
             dataPerPage,
             indexFirstResult,
-            search
+            search,
           )
-          .then((result) => {
+          .then(result => {
             if (result) {
               result.currentPage = indexFirstResult;
               const response = {
@@ -102,30 +102,30 @@ router.get("/", async (req, resp) => {
               };
               resp.json(response);
             } else {
-              resp.json("There is no ingredients in the database.");
+              resp.json('There is no ingredients in the database.');
             }
           })
           .catch(function (error) {
             console.log(error);
-            resp.status(500).json("Database error.");
+            resp.status(500).json('Database error.');
           });
       } else {
         await requestDb
           .selectBySizeAndByFirstIndexFilter(
             dataPerPage,
             indexOfFirstResult,
-            search
+            search,
           )
-          .then((result) => {
+          .then(result => {
             if (result) {
               resp.json(result);
             } else {
-              resp.json("There is no ingredients in the database.");
+              resp.json('There is no ingredients in the database.');
             }
           })
           .catch(function (error) {
             console.log(error);
-            resp.status(500).json("Database error.");
+            resp.status(500).json('Database error.');
           });
       }
     } else {
@@ -139,7 +139,7 @@ router.get("/", async (req, resp) => {
 
         await requestDb
           .selectBySizeAndByFirstIndex(dataPerPage, indexFirstResult)
-          .then((result) => {
+          .then(result => {
             if (result) {
               result.currentPage = indexFirstResult;
               const response = {
@@ -148,26 +148,26 @@ router.get("/", async (req, resp) => {
               };
               resp.json(response);
             } else {
-              resp.json("There is no ingredients in the database.");
+              resp.json('There is no ingredients in the database.');
             }
           })
           .catch(function (error) {
             console.log(error);
-            resp.status(500).json("Database error.");
+            resp.status(500).json('Database error.');
           });
       } else {
         await requestDb
           .selectBySizeAndByFirstIndex(dataPerPage, indexOfFirstResult)
-          .then((result) => {
+          .then(result => {
             if (result) {
               resp.json(result);
             } else {
-              resp.json("There is no ingredients in the database.");
+              resp.json('There is no ingredients in the database.');
             }
           })
           .catch(function (error) {
             console.log(error);
-            resp.status(500).json("Database error.");
+            resp.status(500).json('Database error.');
           });
       }
     }
@@ -181,9 +181,9 @@ router.get("/", async (req, resp) => {
   }
 });
 
-router.put("/update/:id", async (req, resp) => {
+router.put('/update/:id', async (req, resp) => {
   try {
-    if (resp.locals.permission === "admin") {
+    if (resp.locals.permission === 'admin') {
       if (req.params.id) {
         await updateDb
           .updateIngredient(req.body, req.params.id)
@@ -192,17 +192,17 @@ router.put("/update/:id", async (req, resp) => {
           })
           .catch(function (error) {
             console.log(error);
-            resp.status(500).json("Database error.");
+            resp.status(500).json('Database error.');
           });
       } else {
-        const errorMessage = "Id is missing!";
+        const errorMessage = 'Id is missing!';
         const obj = {};
         obj.errorMessage = errorMessage;
         const jsonString = JSON.stringify(obj);
         resp.status(400).json(jsonString);
       }
     } else {
-      const errorMessage = "Only admins can update database!";
+      const errorMessage = 'Only admins can update database!';
       const obj = {};
       obj.errorMessage = errorMessage;
       const jsonString = JSON.stringify(obj);
@@ -218,9 +218,9 @@ router.put("/update/:id", async (req, resp) => {
   }
 });
 
-router.delete("/delete/:id", async (req, resp) => {
+router.delete('/delete/:id', async (req, resp) => {
   try {
-    if (resp.locals.permission === "admin") {
+    if (resp.locals.permission === 'admin') {
       if (req.params.id) {
         await deleteDb
           .deleteIngredientById(req.params.id)
@@ -229,17 +229,17 @@ router.delete("/delete/:id", async (req, resp) => {
           })
           .catch(function (error) {
             console.log(error);
-            resp.status(500).json("Database error.");
+            resp.status(500).json('Database error.');
           });
       } else {
-        const errorMessage = "Id is missing!";
+        const errorMessage = 'Id is missing!';
         const obj = {};
         obj.errorMessage = errorMessage;
         const jsonString = JSON.stringify(obj);
         resp.status(400).json(jsonString);
       }
     } else {
-      const errorMessage = "Only admins can update database!";
+      const errorMessage = 'Only admins can update database!';
       const obj = {};
       obj.errorMessage = errorMessage;
       const jsonString = JSON.stringify(obj);
@@ -255,9 +255,9 @@ router.delete("/delete/:id", async (req, resp) => {
   }
 });
 
-router.post("/ingredient", async (req, resp) => {
+router.post('/ingredient', async (req, resp) => {
   try {
-    if (resp.locals.permission === "admin") {
+    if (resp.locals.permission === 'admin') {
       await insertDb
         .insertIngredient(req.body)
         .then(() => {
@@ -265,10 +265,10 @@ router.post("/ingredient", async (req, resp) => {
         })
         .catch(function (error) {
           console.log(error);
-          resp.status(500).json("Database error.");
+          resp.status(500).json('Database error.');
         });
     } else {
-      const errorMessage = "Only admins can update database!";
+      const errorMessage = 'Only admins can update database!';
       const obj = {};
       obj.errorMessage = errorMessage;
       const jsonString = JSON.stringify(obj);
@@ -284,14 +284,14 @@ router.post("/ingredient", async (req, resp) => {
   }
 });
 
-router.get("/users", async (req, resp) => {
+router.get('/users', async (req, resp) => {
   try {
-    if (resp.locals.permission === "admin") {
+    if (resp.locals.permission === 'admin') {
       const result = await requestDb.allUserWithRole();
 
       resp.json(result);
     } else {
-      const errorMessage = "Only admins can see this!";
+      const errorMessage = 'Only admins can see this!';
       const obj = {};
       obj.errorMessage = errorMessage;
       const jsonString = JSON.stringify(obj);
@@ -307,9 +307,9 @@ router.get("/users", async (req, resp) => {
   }
 });
 
-router.delete("/users/:username", async (req, resp) => {
+router.delete('/users/:username', async (req, resp) => {
   try {
-    if (resp.locals.permission === "admin") {
+    if (resp.locals.permission === 'admin') {
       if (req.params.username) {
         await deleteDb
           .deleteUser(req.params.username)
@@ -318,17 +318,17 @@ router.delete("/users/:username", async (req, resp) => {
           })
           .catch(function (error) {
             console.log(error);
-            resp.status(500).json("Database error.");
+            resp.status(500).json('Database error.');
           });
       } else {
-        const errorMessage = "Id is missing!";
+        const errorMessage = 'Id is missing!';
         const obj = {};
         obj.errorMessage = errorMessage;
         const jsonString = JSON.stringify(obj);
         resp.status(400).json(jsonString);
       }
     } else {
-      const errorMessage = "Only admins can delete from database!";
+      const errorMessage = 'Only admins can delete from database!';
       const obj = {};
       obj.errorMessage = errorMessage;
       const jsonString = JSON.stringify(obj);
@@ -344,9 +344,9 @@ router.delete("/users/:username", async (req, resp) => {
   }
 });
 
-router.patch("/users/:username", async (req, resp) => {
+router.patch('/users/:username', async (req, resp) => {
   try {
-    if (resp.locals.permission === "admin") {
+    if (resp.locals.permission === 'admin') {
       if (
         req.params.username &&
         req.body.newRole &&
@@ -359,17 +359,17 @@ router.patch("/users/:username", async (req, resp) => {
           })
           .catch(function (error) {
             console.log(error);
-            resp.status(500).json("Database error.");
+            resp.status(500).json('Database error.');
           });
       } else {
-        const errorMessage = "Bad request!";
+        const errorMessage = 'Bad request!';
         const obj = {};
         obj.errorMessage = errorMessage;
         const jsonString = JSON.stringify(obj);
         resp.status(400).json(jsonString);
       }
     } else {
-      const errorMessage = "Only admins can modify user roles!";
+      const errorMessage = 'Only admins can modify user roles!';
       const obj = {};
       obj.errorMessage = errorMessage;
       const jsonString = JSON.stringify(obj);
@@ -385,15 +385,15 @@ router.patch("/users/:username", async (req, resp) => {
   }
 });
 
-router.get("/topTen", async (req, resp) => {
+router.get('/topTen', async (req, resp) => {
   try {
-    console.log("Top ten");
+    console.log('Top ten');
     const result = await requestDb.selectTopTen();
 
     if (result) {
       resp.json(result);
     } else {
-      resp.json("There is no ingredients in the database.");
+      resp.json('There is no ingredients in the database.');
     }
   } catch (err) {
     const errorMessage = err.message;
@@ -404,8 +404,8 @@ router.get("/topTen", async (req, resp) => {
   }
 });
 
-router.get("/proba", async (req, resp) => {
-  resp.json("SIKERULT.");
+router.get('/proba', async (req, resp) => {
+  resp.json('SIKERULT.');
 });
 
 export default router;
