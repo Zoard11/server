@@ -1,5 +1,5 @@
-import mysql from "mysql";
-import autoBind from "auto-bind";
+import mysql from 'mysql';
+import autoBind from 'auto-bind';
 
 export class DbConnection {
   constructor() {
@@ -17,11 +17,11 @@ export class DbConnection {
       // password: 'password',
       // database: 'InciDatabase',
       //remote mysql database
-      host: "34.81.193.217",
+      host: '34.81.193.217',
       port: 3306,
-      user: "root",
-      password: "incipassword",
-      database: "InciDatabase",
+      user: 'root',
+      password: 'incipassword',
+      database: 'InciDatabase',
     });
     autoBind(this);
   }

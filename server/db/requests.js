@@ -1,86 +1,86 @@
-import dbConnection from "./connection.js";
+import dbConnection from './connection.js';
 
 export const UserGroupsNumber = () => {
-  const query = "SELECT COUNT(*) AS DB FROM UserGroups";
-  return dbConnection.executeQuery(query).then((result) => result[0].DB);
+  const query = 'SELECT COUNT(*) AS DB FROM UserGroups';
+  return dbConnection.executeQuery(query).then(result => result[0].DB);
 };
 
 export const UsersNumber = () => {
-  const query = "SELECT COUNT(*) AS DB FROM Users";
-  return dbConnection.executeQuery(query).then((result) => result[0].DB);
+  const query = 'SELECT COUNT(*) AS DB FROM Users';
+  return dbConnection.executeQuery(query).then(result => result[0].DB);
 };
 
 export const allUser = () => {
-  const query = "SELECT * FROM Users";
+  const query = 'SELECT * FROM Users';
   return dbConnection.executeQuery(query);
 };
 
-export const passwordByUsername = (username) => {
-  const query = "SELECT password FROM Users WHERE UserName=?";
-  return dbConnection.executeQuery(query, username).then((result) => result[0]);
+export const passwordByUsername = username => {
+  const query = 'SELECT password FROM Users WHERE UserName=?';
+  return dbConnection.executeQuery(query, username).then(result => result[0]);
 };
 
-export const userIDByName = (username) => {
-  const query = "SELECT UserID FROM Users WHERE UserName=?";
+export const userIDByName = username => {
+  const query = 'SELECT UserID FROM Users WHERE UserName=?';
   return dbConnection
     .executeQuery(query, username)
-    .then((result) => result[0].UserID);
+    .then(result => result[0].UserID);
 };
 
-export const userRole = (username) => {
+export const userRole = username => {
   const query =
-    "SELECT UserGroupname FROM Users f JOIN UserGroups fcs ON f.UserGroupID=fcs.UserGroupID WHERE UserName=?";
+    'SELECT UserGroupname FROM Users f JOIN UserGroups fcs ON f.UserGroupID=fcs.UserGroupID WHERE UserName=?';
   return dbConnection
     .executeQuery(query, username)
-    .then((result) => result[0].UserGroupname);
+    .then(result => result[0].UserGroupname);
 };
 
 export const allUserWithRole = () => {
   const query =
-    "SELECT Username,UserGroupName FROM Users f JOIN UserGroups fcs ON f.UserGroupID=fcs.UserGroupID";
+    'SELECT Username,UserGroupName FROM Users f JOIN UserGroups fcs ON f.UserGroupID=fcs.UserGroupID';
   return dbConnection.executeQuery(query);
 };
 
 export const userRoleModify = (groupName, username) => {
   const query =
-    "UPDATE Users SET UserGroupID=(SELECT UserGroupID FROM UserGroups WHERE UserGroupname=?) WHERE UserName =?;";
+    'UPDATE Users SET UserGroupID=(SELECT UserGroupID FROM UserGroups WHERE UserGroupname=?) WHERE UserName =?;';
   return dbConnection.executeQuery(query, [groupName, username]);
 };
 
 export const selectTopTen = () => {
-  const query = "select * from Ingredients limit 10 ";
+  const query = 'select * from Ingredients limit 10 ';
   return dbConnection.executeQuery(query);
 };
 
-export const selectByName = (name) => {
+export const selectByName = name => {
   const nameWithSpace = ` ${name}`;
   const query =
-    "Select * FROM Ingredients Where `INCI name` LIKE  ? OR `INCI name` LIKE ? ";
+    'Select * FROM Ingredients Where `INCI name` LIKE  ? OR `INCI name` LIKE ? ';
   return dbConnection
     .executeQuery(query, [name, nameWithSpace])
-    .then((result) => result[0]);
+    .then(result => result[0]);
 };
 
 export const selectBySizeAndByFirstIndex = (
   resultsPerPage,
-  indexOfFirstResult
+  indexOfFirstResult,
 ) => {
-  const query = "select * from Ingredients limit ?,? ";
+  const query = 'select * from Ingredients limit ?,? ';
   return dbConnection.executeQuery(query, [indexOfFirstResult, resultsPerPage]);
 };
 
 export const IngredientsNumber = () => {
-  const query = "SELECT COUNT(*) AS DB FROM Ingredients";
-  return dbConnection.executeQuery(query).then((result) => result[0].DB);
+  const query = 'SELECT COUNT(*) AS DB FROM Ingredients';
+  return dbConnection.executeQuery(query).then(result => result[0].DB);
 };
 
 export const selectBySizeAndByFirstIndexFilter = (
   resultsPerPage,
   indexOfFirstResult,
-  name
+  name,
 ) => {
   const query =
-    "select * from Ingredients Where `INCI name` LIKE  ? limit ?,? ";
+    'select * from Ingredients Where `INCI name` LIKE  ? limit ?,? ';
   return dbConnection.executeQuery(query, [
     name,
     indexOfFirstResult,
@@ -88,8 +88,8 @@ export const selectBySizeAndByFirstIndexFilter = (
   ]);
 };
 
-export const IngredientsNumberFilter = (name) => {
+export const IngredientsNumberFilter = name => {
   const query =
-    "SELECT COUNT(*) AS DB FROM Ingredients Where `INCI name` LIKE  ?";
-  return dbConnection.executeQuery(query, name).then((result) => result[0].DB);
+    'SELECT COUNT(*) AS DB FROM Ingredients Where `INCI name` LIKE  ?';
+  return dbConnection.executeQuery(query, name).then(result => result[0].DB);
 };
