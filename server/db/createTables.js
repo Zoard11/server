@@ -61,7 +61,6 @@ export const createAllTable = async () => {
     await createTableUserGroups();
     await createTableUsers();
     await createTableStudents();
-    // await enableRemoveAndUpload();
     const userGroupsNumber = await UserGroupsNumber();
     if (userGroupsNumber === 0) {
       await insertUserGroup('admin');
