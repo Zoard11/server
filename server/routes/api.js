@@ -10,7 +10,7 @@ const router = express.Router();
 
 const upload = multer({dest: 'tmp/csv/'});
 
-router.get('/:name', async (req, resp) => {
+router.get('/ingredients/:name', async (req, resp) => {
   try {
     if (req.params.name) {
       const name = req.params.name.toString().trim();
@@ -70,7 +70,7 @@ router.post('/ingredients', upload.single('file'), async (req, resp) => {
   }
 });
 
-router.get('/', async (req, resp) => {
+router.get('/ingredients', async (req, resp) => {
   try {
     const dataPerPage = parseInt(req.query.dataPerPage);
     const indexOfFirstResult = parseInt(req.query.indexOfFirstResult);
@@ -190,7 +190,7 @@ router.get('/', async (req, resp) => {
   }
 });
 
-router.put('/:id', async (req, resp) => {
+router.put('/ingredients/:id', async (req, resp) => {
   try {
     if (resp.locals.permission === 'admin') {
       if (req.params.id) {
@@ -227,7 +227,7 @@ router.put('/:id', async (req, resp) => {
   }
 });
 
-router.delete('/:id', async (req, resp) => {
+router.delete('/ingredients/:id', async (req, resp) => {
   try {
     if (resp.locals.permission === 'admin') {
       if (req.params.id) {
