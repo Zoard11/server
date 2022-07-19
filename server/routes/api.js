@@ -10,7 +10,7 @@ const router = express.Router();
 
 const upload = multer({dest: 'tmp/csv/'});
 
-router.get('/getInformation/:name', async (req, resp) => {
+router.get('/:name', async (req, resp) => {
   try {
     if (req.params.name) {
       const name = req.params.name.toString().trim();
