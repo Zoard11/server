@@ -15,7 +15,7 @@ export const insertUserUser = (username, hashedPassword) => {
   return dbConnection.executeQuery(query, [username, hashedPassword]);
 };
 
-export const insertIngredient = (data, id) => {
+export const insertIngredient = (data) => {
   const query = 'INSERT INTO Ingredients VALUES ( ?,?,?,?,?,?,?,?,?,?,0) ';
   return dbConnection.executeQuery(query, [
     data.inputTextCosingRefNo,
