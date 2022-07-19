@@ -38,7 +38,7 @@ router.get('/:name', async (req, resp) => {
   }
 });
 
-router.post('/uploadFile', upload.single('file'), async (req, resp) => {
+router.post('/ingredients', upload.single('file'), async (req, resp) => {
   try {
     if (resp.locals.permission === 'admin') {
       if (req.file.filename) {
@@ -76,9 +76,6 @@ router.get('/', async (req, resp) => {
     const indexOfFirstResult = parseInt(req.query.indexOfFirstResult);
     const search = `${req.query.search}%`;
     const order = req.query.order;
-    // console.log('order');
-    // console.log(order);
-    // console.log(order === '');
 
       if(order === ''){
           if (indexOfFirstResult === -1) {
@@ -193,7 +190,7 @@ router.get('/', async (req, resp) => {
   }
 });
 
-router.put('/update/:id', async (req, resp) => {
+router.put('/:id', async (req, resp) => {
   try {
     if (resp.locals.permission === 'admin') {
       if (req.params.id) {
@@ -230,7 +227,7 @@ router.put('/update/:id', async (req, resp) => {
   }
 });
 
-router.delete('/delete/:id', async (req, resp) => {
+router.delete('/:id', async (req, resp) => {
   try {
     if (resp.locals.permission === 'admin') {
       if (req.params.id) {
@@ -395,29 +392,6 @@ router.patch('/users/:username', async (req, resp) => {
     const jsonString = JSON.stringify(obj);
     resp.status(500).json(jsonString);
   }
-});
-
-router.get('/topTen', async (req, resp) => {
-  try {
-    console.log('Top ten');
-    const result = await requestDb.selectTopTen();
-
-    if (result) {
-      resp.json(result);
-    } else {
-      resp.json('There is no ingredients in the database.');
-    }
-  } catch (err) {
-    const errorMessage = err.message;
-    const obj = {};
-    obj.errorMessage = errorMessage;
-    const jsonString = JSON.stringify(obj);
-    resp.status(500).json(jsonString);
-  }
-});
-
-router.get('/proba', async (req, resp) => {
-  resp.json('SIKERULT.');
 });
 
 export default router;
